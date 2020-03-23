@@ -27,6 +27,7 @@ $(function() {
 
         // Roistat begin
         var self = $(this);
+        var self_serialize = self.serializeArray();
         // Roistat end
         $ajaxUrl = $(this).attr('action');
         if ($ajaxUrl == "index.html#point_1") {
@@ -42,7 +43,7 @@ $(function() {
 
                 console.log('callback_send');
                 yaCounter97690.reachGoal('callback_send');
-                _gaq.push(['_trackEvent', 'callback', 'send']);
+                gtag('event', 'send', {'event_category': 'callback'});
 
                 $('#fcallback_form').html('<div class="success" style="color: #000000;"><strong>Спасибо, что воспользовались формой заказа звонка на нашем сайте.</strong><br/>Наш менеджер свяжется с вами в ближайшее время!</div>');
 
@@ -53,7 +54,7 @@ $(function() {
                 var rsProductName = null;
 
                 // - Получение форм
-                $.each(self.serializeArray(), function() {
+                $.each(self_serialize, function() {
                     var field = $(this)[0];
 
                     switch (field.name) {
@@ -95,6 +96,7 @@ $(function() {
 
         // Roistat begin
         var self = $(this);
+        var self_serialize = self.serializeArray();
         // Roistat end
 
         $.ajax({
@@ -107,7 +109,7 @@ $(function() {
 
                 console.log('calculation_send');
                 yaCounter97690.reachGoal('calculation_send');
-                _gaq.push(['_trackEvent', 'calcform', 'send']);
+                gtag('event', 'send', {'event_category': 'calcform'});
 
                 $('#calculate_form').html('<div class="success" style="color: #333;"><strong>Спасибо, что воспользовались формой расчета стоимости шкафа по Вашим размерам на нашем сайте.</strong><br/>Наш менеджер свяжется с вами в ближайшее время!</div>');
 
@@ -122,7 +124,7 @@ $(function() {
                 var rsProductName = null;
 
                 // - Получение форм
-                $.each(self.serializeArray(), function() {
+                $.each(self_serialize, function() {
                     var field = $(this)[0];
 
                     switch (field.name) {
@@ -180,6 +182,7 @@ $(function() {
 
         // Roistat begin
         var self = $(this);
+        var self_serialize = self.serializeArray();
         // Roistat end
 
         $.ajax({
@@ -192,7 +195,7 @@ $(function() {
 
                 console.log('deffer_send');
                 yaCounter97690.reachGoal('deffer_send');
-                _gaq.push(['_trackEvent', 'defferform', 'send']);
+                gtag('event', 'send', {'event_category': 'defferform'});
 
                 $('#calculate_form2').html('<div class="success" style="color: #333;"><strong>Спасибо, что воспользовались формой "Расчет стоимости шкафа по Вашим размерам по программе РАССРОЧКА 0%" на нашем сайте.</strong><br/>Наш менеджер свяжется с вами в ближайшее время!</div>');
 
@@ -207,7 +210,7 @@ $(function() {
                 var rsProductName = null;
 
                 // - Получение форм
-                $.each(self.serializeArray(), function() {
+                $.each(self_serialize, function() {
                     var field = $(this)[0];
 
                     switch (field.name) {
@@ -271,7 +274,7 @@ $(function() {
                 var data = $(output).find('#bf-form-wrap').html();
                 $('#bf-form-wrap').html('<div id="bf_success" class="success"><p><strong>Спасибо, Ваш запрос отправлен!</strong><br>Наш менеджер свяжется с Вами в ближайшее время!</p></div>');
                 try {
-                    _gaq.push(['_trackEvent', 'ContactUs', 'send']);
+                    gtag('event', 'send', {'event_category': 'ContactUs'});
                     //console.log('ContactUs');
                 } catch (e) {
                     console.log(e);
@@ -295,7 +298,7 @@ $(function() {
                 var data = $(output).find('#order_form').html();
                 $('#order_form').html('<div id="of_success" class="success"><p><strong>Спасибо, Ваше письмо отправлено!</strong><br>Оно будет рассмотрено нашим менеджером в ближайшее время!</p></div>');
                 try {
-                    _gaq.push(['_trackEvent', 'WriteLetter', 'send']);
+                    gtag('event', 'send', {'event_category': 'WriteLetter'});
                     //console.log('WriteLetter');
                 } catch (e) {
                     console.log(e);
@@ -315,6 +318,48 @@ $(function() {
         });
         // Roistat End
     });
+
+    $('#letterform').submit(function(e) {
+
+    	if ($('#letterform [name="lf_name"]').val() == '') {
+            $('#letterform [name="lf_name"]').addClass('error').after('<div class="error-tip">заполните поле</div>');
+            return false;
+        }
+        if ($('#letterform [name="lf_email"]').val() == '') {
+            $('#letterform [name="lf_email"]').addClass('error').after('<div class="error-tip">заполните поле</div>');
+            return false;
+        }
+
+        var formData = new FormData(this);
+        e.preventDefault();
+
+        $.ajax({
+            type: $(this).attr('method'),
+            url: $(this).attr('action'),
+            data: formData,
+            processData: false,
+            contentType: false,
+            resetForm: 'true',
+            success: function(output) {
+                var data = $(output).find('#letter_form').html();
+                $('#letter_form').html('<div id="of_success" class="success"><p><strong>Спасибо, Ваше письмо отправлено!</strong><br>Оно будет рассмотрено нашим менеджером в ближайшее время!</p></div>');
+                return false;
+            }
+        });
+
+        // Roistat Begin
+        $.ajax({
+            type: $(this).attr('method'),
+            url: '//www.radius-line.ru/roistat/file.php',
+            data: formData,
+            processData: false,
+            contentType: false,
+            resetForm: 'true'
+        });
+        // Roistat End
+    });
+
+
     var sendQuestion = function(e) {
         var formData = new FormData(this);
         e.preventDefault();
@@ -324,6 +369,7 @@ $(function() {
 
         // Roistat begin
         var self = $(this);
+        var self_serialize = self.serializeArray();
         // Roistat end
 
         $.ajax({
@@ -353,7 +399,7 @@ $(function() {
                 var rsProductName = null;
 
                 // - Получение форм
-                $.each(self.serializeArray(), function() {
+                $.each(self_serialize, function() {
                     var field = $(this)[0];
 
                     switch (field.name) {
@@ -409,6 +455,7 @@ $(function() {
 
         // Roistat begin
         var self = $(this);
+        var self_serialize = self.serializeArray();
         // Roistat end
 
         $.ajax({
@@ -438,7 +485,7 @@ $(function() {
                 var rsProductName = null;
 
                 // - Получение форм
-                $.each(self.serializeArray(), function() {
+                $.each(self_serialize, function() {
                     var field = $(this)[0];
 
                     switch (field.name) {
@@ -487,6 +534,7 @@ $(function() {
         e.preventDefault();
 
         var self = $(this);
+        var self_serialize = self.serializeArray();
 
         if ($(this).find('input:required').val().length == 0) {
             $(this).find('input:required').addClass('error').after('<div class="error-tip">заполните поле</div>');
@@ -504,7 +552,7 @@ $(function() {
 
                 try {
                     yaCounter97690.reachGoal('gager_send');
-                    _gaq.push(['_trackEvent', 'gagerform', 'send']);
+                    gtag('event', 'send', {'event_category': 'gagerform'});
                     console.log('gager_send');
 
                 } catch (e) {
@@ -526,7 +574,7 @@ $(function() {
         var rsProductName = null;
 
         // - Получение форм
-        $.each($(this).serializeArray(), function() {
+        $.each(self_serialize, function() {
             var field = $(this)[0];
 
             switch (field.name) {
@@ -566,12 +614,18 @@ $(function() {
 
         // Roistat begin
         var self = $(this);
+        var self_serialize = self.serializeArray();
         // Roistat end
+
+        $ajaxUrl = $(this).attr('action');
+        if ($ajaxUrl == "index.html#point_1") {
+            $ajaxUrl = "/#point_1";
+        }
 
         $.ajax({
             type: $(this).attr('method'),
             // url:  $(this).attr('action'),
-            url: '/#point_268',
+            url: $ajaxUrl,
             data: $(this).serialize(),
             resetForm: 'true',
             success: function(output) {
@@ -579,7 +633,7 @@ $(function() {
 
                 console.log('gager_send');
                 yaCounter97690.reachGoal('gager_send');
-                _gaq.push(['_trackEvent', 'gagerform', 'send']);
+                gtag('event', 'send', {'event_category': 'gagerform'});
 
                 $('#zamerschik_form').html('<div class="success" style="color: #000;"><strong>Спасибо, что воспользовались формой вызова замерщика на нашем сайте.</strong><br/>Наш менеджер свяжется с вами в ближайшее время!</div>');
 
@@ -590,7 +644,7 @@ $(function() {
                 var rsProductName = null;
 
                 // - Получение форм
-                $.each(self.serializeArray(), function() {
+                $.each(self_serialize, function() {
                     var field = $(this)[0];
 
                     switch (field.name) {
@@ -627,6 +681,149 @@ $(function() {
         });
     });
 
+    /* start calc cost send */
+
+    $('#calculate_cost').submit(function(e) {
+        e.preventDefault();
+        var error = false;
+
+        if ($('#calculate_cost [name="size_x"]').val() == '') {
+            $('#calculate_cost [name="size_x"]').addClass('error').after('<div class="error-tip">заполните поле</div>');
+            var error = true;
+        }
+        if ($('#calculate_cost [name="size_y"]').val() == '') {
+            $('#calculate_cost [name="size_y"]').addClass('error').after('<div class="error-tip">заполните поле</div>');
+            var error = true;
+        }
+        if ($('#calculate_cost [name="name"]').val() == '') {
+            $('#calculate_cost [name="name"]').addClass('error').after('<div class="error-tip">заполните поле</div>');
+            var error = true;
+        }
+        if ($('#calculate_cost [name="email"]').val() == '' && $('#calculate_cost [name="phone"]').val() == '') {
+            $('#calculate_cost [name="email"], #calculate_cost [name="phone"]').addClass('error').after('<div class="error-tip">укажите номер телефона или e-mail</div>');
+            var error = true;
+        }
+
+        if ( error ) {
+            return false;
+        }
+
+        // Roistat begin
+        var self = $(this);
+        var self_serialize = self.serializeArray();
+        // Roistat end
+
+        $ajaxUrl = $(this).attr('action');
+        if ($ajaxUrl == "index.html#point_1") {
+            $ajaxUrl = "/#point_1";
+        }
+
+        $.ajax({
+            type: $(this).attr('method'),
+            url: $ajaxUrl,
+            data: $(this).serialize(),
+            resetForm: 'true',
+            success: function(output) {
+                /*$('#calculate_cost_form').html('<div class="success" style="color: #000;"><strong>Спасибо, что воспользовались формой расчета стоимости на нашем сайте.</strong><br/>Наш менеджер свяжется с вами в ближайшее время!</div>');*/
+                
+                // Roistat Begin
+                var rsForm = 'Рассчитать стоимость';
+                var rsName = null;
+                var rsPhone = null;
+                var rsEmail = null;
+                var rsSizeX = null;
+                var rsSizeY = null;
+                var rsSizeZ = null;
+                var rsProductName = null;
+
+                // - Получение форм
+                $.each(self_serialize, function() {
+                    var field = $(this)[0];
+
+                    switch (field.name) {
+                        case 'name':
+                            rsName = field.value;
+                            break;
+                        case 'phone':
+                            rsPhone = field.value;
+                            break;
+                        case 'email':
+                            rsEmail = field.value;
+                            break;
+                        case 'tovar':
+                            rsProductName = field.value;
+                            break;
+                        case 'size_x':
+                            rsSizeX = field.value;
+                            break;
+                        case 'size_y':
+                            rsSizeY = field.value;
+                            break;
+                        case 'size_h':
+                            rsSizeZ = field.value;
+                            break;
+                        case 'file':
+                            rsImgURL = field.value;
+                            break;
+                    }
+                });
+
+                /*console.log(rsName);
+                console.log(rsPhone);
+                console.log(rsEmail);
+                console.log(rsProductName);
+                console.log(rsSizeX);
+                console.log(rsSizeY);
+                console.log(rsSizeZ);
+                console.log(rsImgURL);*/
+                //console.log('Размер X: ' + rsSizeX + ', Размер Y: ' + rsSizeY + ', Высота: ' + rsSizeZ + ', Схема: ' + rsImgURL);
+
+                var rsData = {
+                    leadName: rsForm,
+                    name: rsName,
+                    phone: rsPhone,
+                    email: rsEmail,
+                    text: 'Размер X: ' + rsSizeX + ', Размер Y: ' + rsSizeY + ', Высота: ' + rsSizeZ + ', Схема: ' + rsImgURL,
+                    fields: {
+                        643389: rsForm,
+                        643391: rsProductName
+                    }
+                };
+                //console.log(rsData);
+
+                // - Отправка
+                if (rsSizeX.length !== 0 && rsSizeY.length !== 0 && (rsPhone.length !== 0 || rsEmail.length !== 0)) {
+                    roistatGoal.reach(rsData);
+                }
+                // Roistat End
+
+
+                /* подготовка формы для повторного использования */
+                var formCCF = $('form#calculate_cost');
+                formCCF.find('input[type="text"]').val('');
+                formCCF.find('input[type="text"]').removeClass('error');
+                formCCF.find('input[type="file"]').val('');                
+                formCCF.addClass('no_ccp');
+                /* заново центруем форму */
+                $(".js_calculatecost-modal").css({
+                    'left': ( $(window).width()-$(".js_calculatecost-modal").outerWidth() ) / 2 + 'px',
+                });
+                /* отображаем заглушку об успешной отправке */
+                $('#calculate_cost_report').html('<strong>Спасибо, что воспользовались формой расчета стоимости на нашем сайте.</strong><br/><br/>Наш менеджер свяжется с Вами в ближайшее время!<br/><br/><span class="ccr-btn" id="calculate_cost_report-close">Закрыть форму</span>');
+                $('#calculate_cost_report').show();
+                $('#calculate_cost_report-close').click(function(){
+                    $('.js_calculatecost-modal .js_close').click();
+                });
+
+                gtag('event', 'send', {'event_category': 'calcform'});
+
+                return false;
+            }
+        });
+    });
+
+    /* end calc cost send */
+
     if ($('#myFilesRow').length > 0) {
         $('#myFilesRow input[type="file"]').each(function() {
             if ($(this).attr('name') != 'atta_1') $(this).css('display', 'none');
@@ -649,11 +846,36 @@ $(function() {
 
 
     $.mask.definitions['~']='[0-6,9]';
-    $('input[name="fb_phone"], input#phone').mask('+7(~99)999-99-99');
-    $('input[name="of_phone"]').mask('+7(~99)999-99-99');
-    $('input#fphone').mask('+7(~99)999-99-99');
-    $('input#zphone').mask('+7(~99)999-99-99');
-    $('.calc-form-list input[name="phone"]').mask('+7(~99)999-99-99');
+    //$('input[name="fb_phone"], input#phone').mask('+7(~99)999-99-99');
+    //$('input[name="of_phone"]').mask('+7(~99)999-99-99');
+    //$('input[name="lf_phone"]').mask('+7(~99)999-99-99');
+    //$('input#fphone').mask('+7(~99)999-99-99');
+    //$('input#zphone').mask('+7(~99)999-99-99');
+    //$('.calc-form-list input[name="phone"]').mask('+7(~99)999-99-99');
+
+    $('input#fphone, input[name="of_phone"], input[name="lf_phone"], .calc-form-list input[name="phone"], input#zphone, input[name="fb_phone"], input#phone').attr('placeholder', '+7 (___) ___-__-__');
+	$('input#fphone, input[name="of_phone"], input[name="lf_phone"], .calc-form-list input[name="phone"], input#zphone, input[name="fb_phone"], input#phone').on('change', function(){
+		var input_value = $(this).val();
+		input_value = input_value.replace(/[^0-9]/g, ""); // убираем всё кроме цифр
+		/* */
+		if ( input_value.length == 11 ){
+			/* проверяем первую цифру */
+			if ( input_value.substring(0,1) == "7" || input_value.substring(0,1) == "8" ){
+				input_value = "+7" + input_value.substring(1);
+			}
+		}else if (input_value.length == 10){
+			input_value = "+7" + input_value;
+		}else{
+			input_value = "";
+			//$(this).addClass('error').after('<div class="error-tip">Необходимо указать номер телефона в формате "+7 (999) 999-99-99"</div>');
+			alert("Необходимо указать номер телефона в формате:\r\n \"+7 (999) 999-99-99\"");
+		}
+
+		/* Устанавливаем новое значение */
+		$(this).val(input_value);
+
+		//$('input#fphone').val().length
+	});
 
     /*if ( $("div").is("#bf_success") ){
     	setTimeout(function(){
@@ -763,6 +985,24 @@ $(function() {
         }
         send_to_calltouch(sub, fio, phone, email);
 
+        /*console.log(fio.length);
+        console.log(phone.length);
+        console.log($(this).attr('id'));
+        console.log($(this).find('textarea[name="message"]').val().length);*/
+
+        try{
+            if ( fio.length > 0 && phone.length > 0 && $(this).attr('id') == 'callback' ) {
+                gtag('event', 'send', {'event_category': 'callback' });
+                //console.log('send callback');
+            }
+            if ( fio.length > 0 && phone.length > 0 && $(this).find('textarea[name="message"]').val().length > 0 && $(this).attr('id') == 'feedback' ) {
+                gtag('event', 'send', {'event_category': 'WriteLetter' });
+                //console.log('send WriteLetter');
+            }
+        }catch(e){
+            console.log(e);
+        }
+
         // Roistat Begin
         var rsForm = null;
         var rsName = null;
@@ -868,7 +1108,7 @@ function send_to_calltouch(sub, fio, phone, email) {
             fio: fio,
             phoneNumber: phone,
             email: email,
-            sessionId: window.call_value_1
+            sessionId: window.call_value
         });
     }
 }
@@ -972,7 +1212,7 @@ function modalWindow() {
         top: e / 2 - c / 2
     })
 
-    var a = $(".js_dialog_order"),
+    var a = $(".js_dialog_order, .js_dialog_letter"),
         b = a.outerWidth(),
         c = a.outerHeight(),
         d = $(window).width(),
@@ -1010,7 +1250,12 @@ function modalWindow() {
 }*/
 
 function getFileName(number) {
-    var fileWrap = document.getElementById('file_' + number);
+	var form_id = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
+	if ( form_id != "" ) {
+		var fileWrap = document.querySelectorAll('#'+ form_id + ' #file_' + number)[0];
+	}else{
+		var fileWrap = document.getElementById('file_' + number);
+	}
     var fileElem = fileWrap.getElementsByClassName('of_file');
     var file = fileElem[0].value;
     file = file.replace(/\\/g, '/').split('/').pop();
@@ -1057,9 +1302,51 @@ $(document).ready(function() {
     $(".js_call-me").click(function(a) {
         $(".js_call-modal").fadeIn(), $(".dialog-overlay").fadeIn(), a.preventDefault()
     });
-    $(".js_order-me, .popular-goods-calc-price, .catalog-item-calc-btn").click(function(a) {
+    //$(".js_order-me, .popular-goods-calc-price, .catalog-item-calc-btn").click(function(a) {
+    $(".js_order-me").click(function(a) {
         a.stopImmediatePropagation();
         $(".js_order-modal").fadeIn(), $(".dialog-overlay").fadeIn(), a.preventDefault()
+    });
+    $(".js_letter-me").click(function(a) {
+        a.stopImmediatePropagation();
+        $(".js_letter-modal").fadeIn(), $(".dialog-overlay").fadeIn(), a.preventDefault()
+    });
+    $(".catalog-item-calc-btn, .popular-goods-calc-price").click(function(a) {
+        a.stopImmediatePropagation();
+        /**/
+        var productBlock    = $(this).parents('.catalog-item-wrap');
+        var formCCF         = $('form#calculate_cost');
+        var formCCP         = $('#calculate_cost_form');
+        var fullname        = productBlock.find('.fullname').val();
+        var imgschema       = productBlock.find('.imgschema').val();
+        /**/
+        formCCP.find('.ccp_name').html(fullname);
+        formCCP.find('.ccp_schema').attr('src', imgschema);
+        /* проверка на наличие схемы (для отображения справа от формы) */
+        if ( fullname && imgschema ){
+            formCCF.find('.calc-form-list input[name="tovar"]').val(fullname);
+            formCCF.find('.ccf_tovar').html('');
+            formCCF.find('.calc-form-list input[name="file"]').val('https://www.radius-line.ru/'+imgschema);
+            formCCF.removeClass('no_ccp');
+        }else if ( fullname ){
+            formCCF.find('.calc-form-list input[name="tovar"]').val(fullname);
+            formCCF.find('.ccf_tovar').html(fullname);
+            formCCF.find('input[name="file"]').val('https://www.radius-line.ru/images/no_image.png');
+            formCCF.addClass('no_ccp');
+        }else{
+            formCCF.find('input[name="tovar"]').val('Нужно уточнить');
+            formCCF.find('.ccf_tovar').html('');
+            formCCF.find('input[name="file"]').val('https://www.radius-line.ru/images/no_image.png');
+            formCCF.addClass('no_ccp');
+        }
+        /* центровка формы */
+        $(".js_calculatecost-modal").css({
+            'left': ( $(window).width()-$(".js_calculatecost-modal").outerWidth() ) / 2 + 'px',
+        });
+        /* убираем заглушку если она есть */
+        $('#calculate_cost_report').hide();
+        /* показ формы */
+        $(".js_calculatecost-modal").fadeIn(), $(".dialog-overlay").fadeIn(), a.preventDefault()
     });
     $(".js_call-to").click(function(a) {
         $(".js_callto-modal").fadeIn(), $(".dialog-overlay").fadeIn(), a.preventDefault()
@@ -1227,8 +1514,6 @@ jQuery(document).ready(function() {
             return false;
         }
     });
-
-
 
 });
 
